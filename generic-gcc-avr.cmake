@@ -108,7 +108,11 @@ if (NOT AVR_SIZE_ARGS)
 endif (NOT AVR_SIZE_ARGS)
 
 # prepare base flags for upload tool
-set(AVR_UPLOADTOOL_BASE_OPTIONS -p ${AVR_MCU} -c ${AVR_PROGRAMMER})
+if(${AVR_MCU} MATCHES "atmega128a")
+  set(AVR_UPLOADTOOL_BASE_OPTIONS -p m128 -c ${AVR_PROGRAMMER})
+else(${AVR_MCU} MATCHES "atmega128a")
+  set(AVR_UPLOADTOOL_BASE_OPTIONS -p ${AVR_MCU} -c ${AVR_PROGRAMMER})
+endif(${AVR_MCU} MATCHES "atmega128a")
 
 # use AVR_UPLOADTOOL_BAUDRATE as baudrate for upload tool (if defined)
 if (AVR_UPLOADTOOL_BAUDRATE)
@@ -383,7 +387,7 @@ function(avr_generate_fixed_targets)
       -U lfuse:r:-:b
       -U hfuse:r:-:b
       -U efuse:r:-:b
-      -U lock::r:-:b
+      -U lock:r:-:b
       COMMENT "Get fuses from ${AVR_MCU}"
   )
 
